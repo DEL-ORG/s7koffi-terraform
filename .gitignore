@@ -1,18 +1,34 @@
-# This .gitignore is appropriate for repositories deployed to GitHub Pages and using
-# a Gemfile as specified at https://github.com/github/pages-gem#conventional
+# Ignore Terraform state files
+*.tfstate
+.tfstate.
 
-# Basic Jekyll gitignores (synchronize to Jekyll.gitignore)
-_site/
-.sass-cache/
-.jekyll-cache/
-.jekyll-metadata
+# Ignore Terraform plan files
+*.tfplan
 
-# Additional Ruby/bundler ignore for when you run: bundle install
-/vendor
+# Ignore backup files created by Terraform
+*.tf.backup
 
-# Specific ignore for GitHub Pages
-# GitHub Pages will always use its own deployed version of pages-gem 
-# This means GitHub Pages will NOT use your Gemfile.lock and therefore it is
-# counterproductive to check this file into the repository.
-# Details at https://github.com/github/pages-gem/issues/768
-Gemfile.lock
+# Ignore the .terraform directory (where plugins are stored)
+.terraform/
+
+# Ignore files related to crash logs
+crash.log
+
+# Ignore sensitive variable files (e.g., terraform.tfvars usually holds sensitive data)
+*.tfvars
+*.tfvars.json
+
+# Ignore any override files as they can contain local-only configurations
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore temporary files created by editors
+*.swp
+*.swo
+*~
+
+# Ignore .DS_Store (macOS) and Thumbs.db (Windows)
+.DS_Store
+Thumbs.db
