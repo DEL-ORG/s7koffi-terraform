@@ -6,6 +6,6 @@ resource "aws_instance" "web" {
   security_groups = var.security_group_ids
 
   tags = {
-    Name = "my-new-instance"
+    Name = "my-ec2-instance"
   }
 }

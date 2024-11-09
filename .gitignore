@@ -28,7 +28,3 @@ override.tf.json
 *.swp
 *.swo
 *~
-
-# Ignore .DS_Store (macOS) and Thumbs.db (Windows)
-.DS_Store
-Thumbs.db
