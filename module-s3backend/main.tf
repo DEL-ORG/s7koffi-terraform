@@ -8,7 +8,7 @@ resource "aws_s3_bucket" "terraform_state" {
   bucket = "s7kbasket" # Existing S3 bucket name
 
   tags = {
-    Name        = "s7kbasket"
+    Name        = "Terraform-bucket"
     Environment = "dev"
   }
 }
