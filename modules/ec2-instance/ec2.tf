@@ -5,7 +5,5 @@ resource "aws_instance" "web" {
   key_name        = var.key_name
   security_groups = var.security_group_ids
 
-  tags = {
-    Name = "my-ec2-instance"
-  }
+  tags = var.common_tags
 }
