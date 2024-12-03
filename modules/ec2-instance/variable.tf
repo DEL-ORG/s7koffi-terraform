@@ -16,12 +16,16 @@ variable "ami_id" {
   type        = string
 }
 
+variable "vpc_id" {
+  description = "vpc Id for the EC2 instance"
+  type        = string
+}
 variable "key_name" {
   description = "Key pair to access the EC2 instance"
   type        = string
 }
 
-variable "security_group_ids" {
+variable "aws_security_group_ids" {
   description = "Security group IDs to attach to the instance"
   type        = list(string)
 }

@@ -19,8 +19,8 @@ locals {
   instance_type      = "t2.micro"
   ami_id             = "ami-0866a3c8686eaeeba"  # Replace with a valid AMI ID for your region
   key_name           = "my-key"                 # Replace with your key pair name
-  security_group_ids = ["sg-0a123456b789cdef0"] # Replace with your security group ID
-
+  vpc_id             = "vpc-05c4ec68dc86a1e2f"
+  aws_security_group_ids = "sg-0a123456b789cdef0" # Replace with your security group ID
   common_tags = {
     "id"             = "2024"
     "owner"          = "s7koffimensah"
@@ -37,6 +37,7 @@ module "ec2-instance" {
   instance_type      = local.instance_type
   ami_id             = local.ami_id
   key_name           = local.key_name
-  security_group_ids = local.security_group_ids
+  vpc_id             = local.vpc_id
+  aws_security_group_ids = local.aws_security_group_ids
   common_tags        = local.common_tags
 }
