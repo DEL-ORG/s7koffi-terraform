@@ -90,7 +90,11 @@ resource "aws_s3_bucket" "state" {
       }
     }
   }
-  tags = var.common_tags
+  
+  tags = merge(var.common_tags,{
+    Name = format("%s-%s-%s-s7-tf-state", var.common_tags["id"], var.common_tags["environment"], var.common_tags["project"])
+  }
+  )
 }
 
 resource "aws_s3_bucket" "backup" {
@@ -100,19 +104,10 @@ resource "aws_s3_bucket" "backup" {
   versioning {
     enabled = true
   }
-  tags = var.common_tags
-}
 
-
-resource "aws_dynamodb_table" "s7-tf-state-lock" {
-  provider       = "aws.state"
-  name           = format("%s-%s-%s-s7-tf-state-lock", var.common_tags["id"], var.common_tags["environment"], var.common_tags["project"])
-  hash_key       = "LockID"
-  read_capacity  = 20
-  write_capacity = 20
-  attribute {
-    name = "LockID"
-    type = "S"
+  tags = merge(var.common_tags,{
+    Name = format("%s-%s-%s-s7-tf-state-backup", var.common_tags["id"], var.common_tags["environment"], var.common_tags["project"])
   }
-  tags = var.common_tags
+  )
 }
+

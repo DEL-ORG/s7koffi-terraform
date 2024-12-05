@@ -8,6 +8,10 @@ variable "aws_region_backup" {
   default = "us-east-2"
 }
 
+variable "replication_role_arn" {
+  description = "The ARN of the IAM role used for S3 bucket replication."
+  type        = string
+}
 variable "common_tags" {
   description = "A map of tags to be applied to all resources"
   type        = map(string)
