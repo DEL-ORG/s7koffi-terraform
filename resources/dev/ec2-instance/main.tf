@@ -14,13 +14,12 @@ provider "aws" {
   region = local.aws_region
 }
 
-# terraform 
 terraform {
     backend "s3" {
-    bucket         = "dev-s7-tf-state"           
+    bucket         = "2024-dev-my-project-s7-tf-state"           
     key            = "ec2-instance/terraform.tfstate" 
     region         = "us-east-1"                                 
-    dynamodb_table = "dev-s7-tf-state-lock"  
+    dynamodb_table = "2024-dev-my-project-s7-tf-state-lock"  
     encrypt        = true    
   }
 }

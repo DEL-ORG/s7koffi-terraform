@@ -12,6 +12,16 @@ provider "aws" {
   region = local.aws_region
 }
 
+# Terraform s3 backend
+terraform {
+    backend "s3" {
+    bucket         = "2024-dev-my-project-s7-tf-state"           
+    key            = "vpc02/terraform.tfstate" 
+    region         = "us-east-1"                                 
+    dynamodb_table = "2024-dev-my-project-s7-tf-state-lock"  
+    encrypt        = true    
+  }
+}
 locals {
   aws_region = "us-east-1"
   cidr_block = "10.0.0.0/16"

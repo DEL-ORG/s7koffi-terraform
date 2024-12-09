@@ -8,15 +8,24 @@ terraform {
     }
   }
 }
-
 provider "aws" {
-  alias  = "state"
+  alias  = "source"
   region = local.aws_region_main
 }
-
 provider "aws" {
   alias  = "backup"
   region = local.aws_region_backup
+}
+
+# Backend Configuration
+terraform {
+  backend "s3" {
+    bucket         = "2024-dev-s7project-s7-tf-state"
+    key            = "s3-backend/terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "2024-dev-s7project-s7-tf-state-lock"
+    encrypt        = true
+  }
 }
 
 locals {
@@ -25,11 +34,12 @@ locals {
 
   common_tags = {
     "id"             = "2024"
-    "owner"          = "s7koffimensah"
+    "owner"          = "s7koffi"
     "environment"    = "dev"
-    "project"        = "my-project"
+    "project"        = "s7project"
     "create_by"      = "Terraform"
     "cloud_provider" = "aws"
+    "company"        = "DEL"
   }
 }
 

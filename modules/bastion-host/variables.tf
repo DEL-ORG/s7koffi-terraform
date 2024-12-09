@@ -2,54 +2,65 @@
 variable "aws_region" {
   type        = string
   description = "aws region"
-  default     = "us-east-1"
+  default     = ""
 }
 
 variable "aws_instance" {
   type        = string
   description = "aws region"
-  default     = "bastion-host"
+  default     = ""
 }
 
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC"
-  default     = "vpc-05c4ec68dc86a1e2f"
+  default     = ""
 }
 
 variable "aws_security_group" {
   type        = string
   description = "security group name"
-  default     = "bastion_sg"
+  default     = ""
 }
 
 variable "public_subnet_id" {
   type        = string
   description = "The ID of the public subnet where the bastion host will be deployed"
-  default     = "subnet-03de39c16743cdbd2"
+  default     = ""
 }
 
 variable "ami_id" {
   type        = string
   description = "The ID of the AMI to be used for the Bastion Host"
-  default     = "ami-0866a3c8686eaeeba"
+  default     = ""
 }
 
+variable "volume_size" {
+  type        = string
+  description = ""
+  default     = ""
+}
+
+variable "volume_type" {
+  type        = string
+  description = ""
+  default     = ""
+}
 variable "key_name" {
   type        = string
   description = "The name of the SSH key pair for accessing the Bastion Host"
-  default     = "My-key"
+  default     = ""
 }
 
 variable "instance_type" {
   type        = string
   description = "The EC2 instance type for the Bastion Host"
-  default     = "t2.micro"
+  default     = ""
 }
 
 variable "allowed_ssh_cidr" {
   description = "The CIDR range allowed to SSH into the Bastion Host"
-  default     = "0.0.0.0/0"
+  default     = ""
 }
 
 variable "common_tags" {

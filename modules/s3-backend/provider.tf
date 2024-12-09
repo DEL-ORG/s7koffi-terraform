@@ -10,7 +10,7 @@ terraform {
 }
 
 provider "aws" {
-  alias  = "state"
+  alias  = "source"
   region = var.aws_region_main
 }
 

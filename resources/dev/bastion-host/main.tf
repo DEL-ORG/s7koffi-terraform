@@ -14,15 +14,15 @@ provider "aws" {
   region = local.aws_region
 }
 
-terraform {
-    backend "s3" {
-    bucket         = "dev-bastion-s7-tf-state"           
-    key            = "bastion-host/terraform.tfstate" 
-    region         = "us-east-1"                                 
-    dynamodb_table = "dev-bastion-s7-tf-state-lock"  
-    encrypt        = true    
-  }
-}
+# terraform {
+#     backend "s3" {
+#     bucket         = "2024-dev-my-project-s7-tf-state"           
+#     key            = "bastion-host/terraform.tfstate" 
+#     region         = "us-east-1"                                 
+#     dynamodb_table = "2024-dev-my-project-s7-tf-state-lock"  
+#     encrypt        = true    
+#   }
+# }
 
 
 locals {
@@ -34,6 +34,8 @@ locals {
   ami_id             = "ami-0866a3c8686eaeeba"
   key_name           = "My-key"
   instance_type      = "t2.micro"
+  volume_size        = "30"
+  volume_type        = "gp3"
   allowed_ssh_cidr   = "0.0.0.0/0"
   common_tags = {
     "id"             = "2024"
@@ -55,6 +57,8 @@ module "bastion_host" {
   ami_id             = local.ami_id
   key_name           = local.key_name
   instance_type      = local.instance_type
+  volume_size        = local.volume_size
+  volume_type        = local.volume_type
   allowed_ssh_cidr   = local.allowed_ssh_cidr
   common_tags        = local.common_tags
 
