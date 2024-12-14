@@ -1,14 +1,14 @@
 variable "aws_region" {
   description = "The ID of the VPC where subnets will be created"
   type        = string
-  default = "us-east-1"
+  default     = "us-east-1"
 }
 
 # Variables for customization
 variable "vpc_id" {
   description = "The ID of the VPC where the subnet will be created"
   type        = string
-  default = "vpc-05c4ec68dc86a1e2f"
+  default     = "vpc-05c4ec68dc86a1e2f"
 }
 
 variable "subnet_cidr" {
