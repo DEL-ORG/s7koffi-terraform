@@ -12,11 +12,12 @@
 
 # create Elastic IPs for NAT Gateways
 resource "aws_eip" "nat" {
-  count = format("%s", var.tags["environment"]) == "prod" ? length(var.availability_zones) : 1  # create 3 EIPs for production, 1 for other environments
+  count = var.tags["environment"] == "prod" ? length(var.availability_zones) : 1
+
   vpc = true
-  
+
   tags = {
-    Name = format("%s-eip-nat", count.index)
-    }
+    Name = format("%s-nat_eip-%d", var.tags["environment"], count.index + 1)
+  }
 }
 

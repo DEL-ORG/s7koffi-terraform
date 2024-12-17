@@ -15,13 +15,12 @@
 
 # creat NAT Gateway
 resource "aws_nat_gateway" "nat" {
-  count = format("%s", var.tags["environment"]) == "prod" ? length(var.availability_zones) : 1  # create 3 Nats for production, 1 for other environments
- 
-  allocation_id = aws_eip.nat[count.index].id   # use the EIP for the NAT Gateway
-  subnet_id     = aws_subnet.my_public_subnet[count.index % length(aws_subnet.my_public_subnet)].id # Distribute NAT Gateway accross available public subnets
+  count = var.tags["environment"] == "prod" ? length(var.availability_zones) : 1 # 3 NATs for prod, 1 for other environments
 
+  allocation_id = aws_eip.nat[count.index].id
+  subnet_id     = values(aws_subnet.my_public_subnet)[count.index % length(values(aws_subnet.my_public_subnet))].id
 
   tags = {
-    Name = format("%s-nat_gateway", count.index)
-    }
+    Name = format("%s-nat_gateway-%d", var.tags["environment"], count.index + 1)
+  }
 }

@@ -19,11 +19,11 @@ resource "aws_subnet" "my_public_subnet" {
   for_each = tomap({ for idx, cidr in var.public_subnet_cidrs : idx => cidr })
 
   vpc_id                  = aws_vpc.my_main_vpc.id
-  cidr_block = each.value
+  cidr_block              = each.value
   availability_zone       = element(var.availability_zones, each.key)
   map_public_ip_on_launch = true
 
   tags = {
     Name = format("%s-my_public_subnet-%d", var.tags["environment"], each.key + 1)
-    }
+  }
 }

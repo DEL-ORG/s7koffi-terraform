@@ -15,5 +15,5 @@ resource "aws_internet_gateway" "my_igw" {
 
   tags = {
     Name = format("%s-my_igw", var.tags["environment"])
-    }
+  }
 }

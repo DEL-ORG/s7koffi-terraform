@@ -12,16 +12,16 @@
 #   )
 # }
 
-# create 3 private subnets
+# Create 3 private subnets
 resource "aws_subnet" "my_private_subnet" {
-  for_each = tomap({ for idx, cidr in var.private_subnet_cidrs : idx => cidr })
+  for_each = toset(var.private_subnet_cidrs)
 
   vpc_id                  = aws_vpc.my_main_vpc.id
-  cidr_block = each.value
-  availability_zone       = element(var.availability_zones, each.key)
-  map_public_ip_on_launch = false  # Private subnets should not map public IPs
+  cidr_block              = each.value
+  availability_zone       = element(var.availability_zones, index(var.private_subnet_cidrs, each.value))
+  map_public_ip_on_launch = false # Private subnets should not map public IPs
 
   tags = {
-    Name = format("%s-my_private_subnet-%d", var.tags["environment"], each.key + 1)
-    }
+    Name = format("%s-my_private_subnet-%d", var.tags["environment"], index(var.private_subnet_cidrs, each.value) + 1)
+  }
 }

@@ -54,8 +54,8 @@
 
 # Create a Route Table for Public Subnets
 resource "aws_route_table" "my_public_rt" {
-  for_each = aws_subnet.my_public_subnet # creating one rt for each public subnet
-  vpc_id = aws_vpc.my_main_vpc.id
+  for_each = aws_subnet.my_public_subnet
+  vpc_id   = aws_vpc.my_main_vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -63,43 +63,47 @@ resource "aws_route_table" "my_public_rt" {
   }
 
   tags = {
-    Name = format("%s-my_public_rt", var.tags["environment"], each.key)
-    }
+    Name = format("%s-my_public_rt-%s", var.tags["environment"], each.key)
+  }
 }
 
 # Associate Public Subnets with the Public Route Table
 resource "aws_route_table_association" "public_association" {
-   for_each = aws_subnet.my_public_subnet # Iterate over the public subnets
-   
-   subnet_id = each.value.id
-   route_table_id = aws_route_table.my_public_rt[each.key].id # referencing the public rt for each subnet
-
+  for_each       = aws_subnet.my_public_subnet
+  subnet_id      = each.value.id
+  route_table_id = aws_route_table.my_public_rt[each.key].id
 }
 
-# Create a Route Table for Private Subnets (No direct route to the internet)
+# Create a Route Table for each AZ
 resource "aws_route_table" "my_private_rt" {
-  for_each = {
-    for idx, subnet in aws_subnet.my_private_subnet     # creating one rt for each private subnet
-  }
-  vpc_id = aws_vpc.my_main_vpc.id
+  for_each = toset(var.availability_zones)
+  vpc_id   = aws_vpc.my_main_vpc.id
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    nat_gateway_id = lookup(
-      aws_nat_gateway.nat[*].id,
-      var.tags["environment"] == "prod" ? length(var.availability_zones) : 1  
-    )
-  }
+  # route {
+  #   cidr_block = "0.0.0.0/0"
+  #   nat_gateway_id = element(
+  #     aws_nat_gateway.nat[*].id,
+  #     var.tags["environment"] == "prod" ? length(var.availability_zones) - 1 : 0
+  #   )
+  # }
 
   tags = {
-      Name = format("%s-my_private_rt", var.tags["environment"])
-      }
+    Name = format("%s-my_private_rt-%s", var.tags["environment"], each.key)
+  }
 }
 
-# Associate Private Subnets with the Private Route Table
+# Associate route table to the Private Subnets 
 resource "aws_route_table_association" "private_association" {
-  for_each = aws_subnet.my_private_subnet # Iterate over the public subnets
-  subnet_id = each.value.id
-  route_table_id = aws_route_table.my_private_rt[each.key].id # referencing the private rt for each subnet
+  for_each       = toset(var.availability_zones)
+  subnet_id      = values(aws_subnet.my_private_subnet)[index(var.availability_zones, each.key)].id
+  route_table_id = aws_route_table.my_private_rt[each.key].id
 }
 
+# Create a route table from each route table to the corresponding Nat Gateway
+resource "aws_route" "default_route" {
+  for_each = toset(var.availability_zones)
+
+  route_table_id         = aws_route_table.my_private_rt[each.key].id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.nat[index(var.availability_zones, each.key)].id
+}

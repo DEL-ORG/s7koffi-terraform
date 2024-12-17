@@ -1,6 +1,6 @@
-resource "aws_dynamodb_table" "s7-tf-state-lock" {
+resource "aws_dynamodb_table" "s7k-tf-state-lock" {
   provider = aws.source
-  name     = format("%s-%s-%s-s7-tf-state-lock", var.common_tags["id"], var.common_tags["environment"], var.common_tags["project"])
+  name     = format("%s-%s-s7k-tf-state-lock", var.common_tags["environment"], var.common_tags["project"])
   hash_key = "LockID"
   #   read_capacity  = 20
   #   write_capacity = 20
@@ -9,5 +9,8 @@ resource "aws_dynamodb_table" "s7-tf-state-lock" {
     name = "LockID"
     type = "S"
   }
-  tags = var.common_tags
+  tags = merge(var.common_tags, {
+    Name = format("%s-%s-s7k-tf-state-lock", var.common_tags["environment"], var.common_tags["project"])
+    }
+  )
 }
